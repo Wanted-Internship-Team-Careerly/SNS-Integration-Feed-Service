@@ -19,7 +19,7 @@ public class PostController {
 
   @Operation(summary = "게시글 상세보기", description = "유저가 게시물을 클릭 시 사용되는 API")
   @GetMapping("/api/post/{postId}")
-  public ResponseEntity<?> getPostDetail(@PathVariable String postId) {
+  public ResponseEntity<PostDetailResponseDto> getPostDetail(@PathVariable String postId) {
     PostDetailResponseDto postDetailResponseDto = postService.getPostDetail(postId);
     return ResponseEntity.ok().body(postDetailResponseDto);
   }
