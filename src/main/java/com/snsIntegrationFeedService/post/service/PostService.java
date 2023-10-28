@@ -28,6 +28,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private WebClient webClient;
+
     @Transactional
     public PostDetailResponseDto getPostDetail(String postId) {
         // 예외 처리
@@ -47,7 +48,7 @@ public class PostService {
 
     @Transactional
     public PostTypeEnum postLike(String postId, boolean isTest) {
-        webClient =  WebClient.builder().build();
+        webClient = WebClient.builder().build();
         Post post = postRepository.findByPostId(postId).orElseThrow(
             () -> new CustomException(CustomErrorCode.POST_ID_NOT_FOUND)
         );
@@ -91,8 +92,7 @@ public class PostService {
         if (statusCode.value() == HttpStatus.OK.value() || isTest) {
             post.like();
             return postType;
-        }
-        else {
+        } else {
             throw new CustomException(CustomErrorCode.URL_NOT_FOUND);
         }
     }
