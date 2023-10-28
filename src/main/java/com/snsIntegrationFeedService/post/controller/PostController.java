@@ -22,21 +22,21 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class PostController {
 
-	private final PostService postService;
+    private final PostService postService;
 
-	@Operation(summary = "게시글 상세보기", description = "유저가 게시물을 클릭 시 사용되는 API")
-	@GetMapping("/api/post/{postId}")
-	public ResponseEntity<PostDetailResponseDto> getPostDetail(@PathVariable String postId) {
-		PostDetailResponseDto postDetailResponseDto = postService.getPostDetail(postId);
-		return ResponseEntity.ok().body(postDetailResponseDto);
-	}
+    @Operation(summary = "게시글 상세보기", description = "유저가 게시물을 클릭 시 사용되는 API")
+    @GetMapping("/api/post/{postId}")
+    public ResponseEntity<PostDetailResponseDto> getPostDetail(@PathVariable String postId) {
+        PostDetailResponseDto postDetailResponseDto = postService.getPostDetail(postId);
+        return ResponseEntity.ok().body(postDetailResponseDto);
+    }
 
     @Operation(summary = "좋아요 남기기", description = "content_id를 사용하여 특정 게시물에 대한 좋아요 "
         + "요청, 해당 컨트롤러는 SNS Type별 API를 사용하여 좋아요 요청을 수행하고 결과(성공, NOT_FOUND) 반환")
     @PostMapping("/api/post/like/{content_id}")
-    public ResponseEntity<ApiResponseDto> updatePostLike(@PathVariable String content_id)
-        throws NotFoundException {
-        PostTypeEnum postType = postService.postLike(content_id);
+    public ResponseEntity<ApiResponseDto> updatePostLike(@PathVariable String postId) {
+        boolean isLikeAPITest = true;
+        PostTypeEnum postType = postService.postLike(postId, isLikeAPITest);
         return ResponseEntity.ok().body(
             new ApiResponseDto(HttpStatus.OK.value(), postType.toString() + " 게시물 좋아요 완료")
         );

@@ -11,6 +11,8 @@ public enum CustomErrorCode {
 	USER_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "존재하지 않는 사용자입니다."),
 
 	POST_ID_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "존재하지 않는 게시글 아이디입니다."),
+
+	URL_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "잘못된 URL 요청입니다."),
 	;
 
 	private final int errorCode;
