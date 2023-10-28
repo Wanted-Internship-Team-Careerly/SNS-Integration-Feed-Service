@@ -12,7 +12,11 @@ public class PasswordValidation {
 	String account;
 	String email;
 	String password;
-	CommonPassword commonPassword;
+	private final CommonPassword commonPassword;
+
+	public PasswordValidation(CommonPassword commonPassword) {
+		this.commonPassword = commonPassword;
+	}
 
 	public void validatePassword(SignupRequestDto requestDto) {
 		this.account = requestDto.getAccount();
