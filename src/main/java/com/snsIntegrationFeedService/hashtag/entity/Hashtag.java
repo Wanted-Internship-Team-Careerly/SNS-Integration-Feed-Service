@@ -1,5 +1,6 @@
 package com.snsIntegrationFeedService.hashtag.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.snsIntegrationFeedService.postHashtag.entity.PostHashtag;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class Hashtag {
 	@Column(nullable = false, unique = true)
 	private String name;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "hashtag", orphanRemoval = true)
 	private List<PostHashtag> postHashtagList = new ArrayList<>();
 }
