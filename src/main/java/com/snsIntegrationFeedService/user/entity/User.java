@@ -3,6 +3,7 @@ package com.snsIntegrationFeedService.user.entity;
 import com.snsIntegrationFeedService.certificateCode.entity.CertificateCode;
 import com.snsIntegrationFeedService.post.entity.Post;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -32,4 +33,15 @@ public class User {
 
 	@OneToOne(mappedBy = "user")
 	private CertificateCode certificateCode;
+
+	@Builder
+	public User(String account, String password, String email) {
+		this.account = account;
+		this.password = password;
+		this.email = email;
+	}
+
+	public User() {
+
+	}
 }
