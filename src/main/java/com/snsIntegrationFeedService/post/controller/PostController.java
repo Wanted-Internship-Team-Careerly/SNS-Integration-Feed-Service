@@ -33,7 +33,7 @@ public class PostController {
 
     @Operation(summary = "좋아요 남기기", description = "content_id를 사용하여 특정 게시물에 대한 좋아요 "
         + "요청, 해당 컨트롤러는 SNS Type별 API를 사용하여 좋아요 요청을 수행하고 결과(성공, NOT_FOUND) 반환")
-    @PostMapping("/api/post/like/{content_id}")
+    @PostMapping("/api/post/like/{postId}")
     public ResponseEntity<ApiResponseDto> updatePostLike(@PathVariable String postId) {
         boolean isLikeAPITest = true;
         PostTypeEnum postType = postService.postLike(postId, isLikeAPITest);
