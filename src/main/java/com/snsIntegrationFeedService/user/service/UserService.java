@@ -17,6 +17,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final PasswordValidation passwordValidation;
 
 	public void signup(SignupRequestDto requestDto) {
 		String account = requestDto.getAccount();
@@ -30,7 +31,7 @@ public class UserService {
 		}
 
 		// 비밀번호 검증이 완료되면 password encoding
-		validatePassword(password);
+		passwordValidation.validatePassword(requestDto);
 		password = passwordEncoder.encode(password);
 
 		User user = User.builder()
@@ -41,10 +42,6 @@ public class UserService {
 
 	private User findUser(String account) {
 		return userRepository.findByAccount(account).orElse(null);
-	}
-
-	private void validatePassword(String password) {
-
 	}
 
 }
