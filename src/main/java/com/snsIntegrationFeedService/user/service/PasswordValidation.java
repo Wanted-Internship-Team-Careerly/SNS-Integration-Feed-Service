@@ -9,9 +9,6 @@ import java.util.regex.Pattern;
 
 @Component
 public class PasswordValidation {
-	String account;
-	String email;
-	String password;
 	private final CommonPassword commonPassword;
 
 	public PasswordValidation(CommonPassword commonPassword) {
@@ -19,12 +16,12 @@ public class PasswordValidation {
 	}
 
 	public void validatePassword(SignupRequestDto requestDto) {
-		this.account = requestDto.getAccount();
-		this.email = requestDto.getEmail();
-		this.password = requestDto.getPassword();
+		String account =  requestDto.getAccount();
+		String email = requestDto.getEmail();
+		String password = requestDto.getPassword();
 
 		// 다른 개인 정보와 유사한 비밀번호는 사용할 수 없다.
-		if (containPrivateInformation()) {
+		if (containPrivateInformation(account, email, password)) {
 			throw new CustomException(CustomErrorCode.CONTAIN_PRIVATE_INFORMATION);
 		}
 
@@ -34,12 +31,12 @@ public class PasswordValidation {
 		}
 
 		// 숫자, 문자, 특수문자 중 2가지 이상을 포함해야 합니다.
-		if (!followRules()) {
+		if (!followRules(password)) {
 			throw new CustomException(CustomErrorCode.NOT_FOLLOW_RULES);
 		}
 
 		// 3회 이상 연속되는 문자 사용이 불가합니다.
-		if (isThreeConsecutiveLetters()) {
+		if (isThreeConsecutiveLetters(password)) {
 			throw new CustomException(CustomErrorCode.NOT_THREE_CONSECUTIVE);
 		}
 
@@ -49,14 +46,14 @@ public class PasswordValidation {
 		}
 	}
 
-	private boolean containPrivateInformation() {
+	private boolean containPrivateInformation(String account, String email, String password) {
 		int atIndex = email.indexOf("@");
 		String id = email.substring(0, atIndex);
 
 		return password.contains(account) || password.contains(id);
 	}
 
-	private boolean followRules() {
+	private boolean followRules(String password) {
 		boolean numberEnglish = Pattern.matches("^(?=.*[0-9]+)(?=.*[a-zA-Z]+).+", password);
 		boolean englishSpecialSymbol = Pattern.matches("^(?=.*[a-zA-Z]+)(?=.*[!@#$%^&*]+).+", password);
 		boolean specialSymbolsNumber = Pattern.matches("^(?=.*[!@#$%^&*]+)(?=.*[0-9]+).+", password);
@@ -64,7 +61,7 @@ public class PasswordValidation {
 		return numberEnglish || englishSpecialSymbol || specialSymbolsNumber;
 	}
 
-	private boolean isThreeConsecutiveLetters() {
+	private boolean isThreeConsecutiveLetters(String password) {
 		int count = 1;
 		for (int i = 1; i < password.length(); i++) {
 			if (password.charAt(i - 1) == password.charAt(i)) {
