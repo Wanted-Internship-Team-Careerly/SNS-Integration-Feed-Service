@@ -38,13 +38,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		String tokenValue = jwtUtil.getTokenFromRequest(req);
 
 		if (StringUtils.hasText(tokenValue)) {
-
+			// 토큰 검증
 			if (notValidate(res, tokenValue)) return;
 
+			// 토큰에서 사용자 정보 가져오기
 			Claims info = getClaims(res, tokenValue);
 			if (info == null) return;
 
-			if (verifyAuthentication(info)) return;
+			// 사용자 정보 인증 객체에 담기
+			if (userInfoInAuthentication(info)) return;
 		}
 
 		filterChain.doFilter(req, res);
@@ -84,7 +86,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		return info;
 	}
 
-	private boolean verifyAuthentication(Claims info) {
+	private boolean userInfoInAuthentication(Claims info) {
 		try {
 			setAuthentication(info.getSubject());
 		} catch (Exception e) {
