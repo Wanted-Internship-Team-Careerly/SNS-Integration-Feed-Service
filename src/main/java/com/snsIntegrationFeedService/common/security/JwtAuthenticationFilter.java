@@ -2,8 +2,8 @@ package com.snsIntegrationFeedService.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.snsIntegrationFeedService.common.dto.ApiResponseDto;
+import com.snsIntegrationFeedService.user.dto.LoginRequestDto;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setStatus(200);
 		response.setContentType("application/json");
 		String result = new ObjectMapper().writeValueAsString(
-				new ApiResponseDto(HttpStatus.OK.value(), "로그인에 성공하였습니다.")
+				new ApiResponseDto(HttpStatus.OK.value(), "login success")
 		);
 
 		response.getOutputStream().print(result);
@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		response.setContentType("application/json");
 		String result = new ObjectMapper().writeValueAsString(
-				new ApiResponseDto(HttpStatus.BAD_REQUEST.value(), "로그인에 실패하였습니다.")
+				new ApiResponseDto(HttpStatus.BAD_REQUEST.value(), "login failure")
 		);
 
 		response.getOutputStream().print(result);
