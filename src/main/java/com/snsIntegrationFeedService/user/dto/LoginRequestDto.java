@@ -1,4 +1,4 @@
-package com.snsIntegrationFeedService.common.security;
+package com.snsIntegrationFeedService.user.dto;
 
 import lombok.Getter;
 
