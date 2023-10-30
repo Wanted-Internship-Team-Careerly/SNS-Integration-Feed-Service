@@ -20,7 +20,13 @@ public enum CustomErrorCode {
 	NOT_FOLLOW_RULES(HttpStatus.BAD_REQUEST.value(),
 			"숫자, 문자, 특수문자 중 2가지 이상을 포함해야 합니다."),
 	NOT_THREE_CONSECUTIVE(HttpStatus.BAD_REQUEST.value(),
-			"3회 이상 연속되는 문자 사용이 불가합니다.");
+			"3회 이상 연속되는 문자 사용이 불가합니다."),
+	CERTIFICATECODE_NOT_FOUND(HttpStatus.NOT_FOUND.value(),
+			"승인코드가 존재하지 않습니다."),
+	PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST.value(),
+			"비밀번호가 일치하지 않습니다."),
+	CERTIFICATECODE_NOT_MATCH(HttpStatus.BAD_REQUEST.value(),
+			"승인코드가 일치하지 않습니다.");
 
 	private final int errorCode;
 	private final String errorMessage;
