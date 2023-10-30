@@ -44,8 +44,7 @@ public class PostController {
 		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
 		PostsResponseDto posts =
-			postService.getPosts(hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page,
-				userDetails.getUser().getAccount());
+			postService.getPosts(hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page, userDetails);
 		return ResponseEntity.ok().body(posts);
 	}
 }
