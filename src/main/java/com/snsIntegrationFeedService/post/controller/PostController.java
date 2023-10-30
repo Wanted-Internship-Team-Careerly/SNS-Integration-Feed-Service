@@ -1,11 +1,13 @@
 package com.snsIntegrationFeedService.post.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
 import com.snsIntegrationFeedService.post.dto.PostDetailResponseDto;
 import com.snsIntegrationFeedService.post.dto.PostsResponseDto;
 import com.snsIntegrationFeedService.post.service.PostService;
@@ -38,10 +40,11 @@ public class PostController {
 		@RequestParam(name = "search_by", required = false) String searchBy,
 		@RequestParam(required = false) String search,
 		@RequestParam(name = "page_count", defaultValue = "10", required = false) int pageCount,
-		@RequestParam(name = "page", defaultValue = "0", required = false) int page
+		@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
 		PostsResponseDto posts =
-			postService.getPosts(hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page);
+			postService.getPosts(hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page, userDetails);
 		return ResponseEntity.ok().body(posts);
 	}
 }

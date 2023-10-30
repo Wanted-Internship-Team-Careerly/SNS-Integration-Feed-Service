@@ -10,12 +10,12 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
 import com.snsIntegrationFeedService.hashtag.entity.QHashtag;
 import com.snsIntegrationFeedService.post.entity.Post;
 import com.snsIntegrationFeedService.post.entity.PostTypeEnum;
 import com.snsIntegrationFeedService.post.entity.QPost;
 import com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag;
-import com.snsIntegrationFeedService.user.entity.QUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,12 +27,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 	@Override
 	public List<Post> findWithFilter(
 		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
-		int pageCount, int page
-	) {
+		int pageCount, int page, UserDetailsImpl userDetails) {
 		QPost qPost = QPost.post;
 		QPostHashtag qPostHashtag = QPostHashtag.postHashtag;
 		QHashtag qHashtag = QHashtag.hashtag;
-		QUser qUser = QUser.user;
 
 		JPAQuery<Post> query = queryFactory.selectFrom(qPost)
 			.leftJoin(qPost.postHashtagList, qPostHashtag).fetchJoin()
@@ -42,7 +40,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 		if (hashtag != null) {
 			query.where(qHashtag.name.eq(hashtag));
 		} else {
-			query.where(qPost.user.eq(qUser));
+			query.where(qHashtag.name.eq(userDetails.getAccount()));
 		}
 
 		// 타입

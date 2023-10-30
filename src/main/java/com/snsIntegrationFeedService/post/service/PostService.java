@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.snsIntegrationFeedService.common.error.CustomErrorCode;
 import com.snsIntegrationFeedService.common.exception.CustomException;
+import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
 import com.snsIntegrationFeedService.post.dto.PostDetailResponseDto;
 import com.snsIntegrationFeedService.post.dto.PostsResponseDto;
 import com.snsIntegrationFeedService.post.entity.Post;
@@ -42,10 +43,10 @@ public class PostService {
 	@Transactional(readOnly = true)
 	public PostsResponseDto getPosts(
 		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
-		int pageCount, int page
-	) {
+		int pageCount, int page,
+		UserDetailsImpl userDetails) {
 		List<Post> posts = postRepository.findWithFilter(
-			hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page
+			hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page, userDetails
 		);
 
 		List<PostDetailResponseDto> postDetailResponseDtos = posts.stream()
