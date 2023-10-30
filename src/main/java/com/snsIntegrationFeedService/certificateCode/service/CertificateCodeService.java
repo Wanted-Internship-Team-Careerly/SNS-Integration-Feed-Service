@@ -27,7 +27,7 @@ public class CertificateCodeService {
 
 		// password 확인
 		User user = userService.findUser(account);
-		if (!user.getPassword().equals(passwordEncoder.encode(password))) {
+		if (!passwordEncoder.matches(password, user.getPassword())) {
 			throw new CustomException(CustomErrorCode.PASSWORD_NOT_MATCH);
 		}
 
