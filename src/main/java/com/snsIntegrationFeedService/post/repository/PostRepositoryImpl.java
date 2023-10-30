@@ -1,5 +1,8 @@
 package com.snsIntegrationFeedService.post.repository;
 
+import static com.snsIntegrationFeedService.post.entity.QPost.*;
+import static com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +13,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
 import com.snsIntegrationFeedService.hashtag.entity.QHashtag;
 import com.snsIntegrationFeedService.post.entity.Post;
 import com.snsIntegrationFeedService.post.entity.PostTypeEnum;
@@ -27,9 +29,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 	@Override
 	public List<Post> findWithFilter(
 		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
-		int pageCount, int page, UserDetailsImpl userDetails) {
-		QPost qPost = QPost.post;
-		QPostHashtag qPostHashtag = QPostHashtag.postHashtag;
+		int pageCount, int page, String account
+	) {
+		QPost qPost = post;
+		QPostHashtag qPostHashtag = postHashtag;
 		QHashtag qHashtag = QHashtag.hashtag;
 
 		JPAQuery<Post> query = queryFactory.selectFrom(qPost)
@@ -40,7 +43,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 		if (hashtag != null) {
 			query.where(qHashtag.name.eq(hashtag));
 		} else {
-			query.where(qHashtag.name.eq(userDetails.getAccount()));
+			query.where(qHashtag.name.eq(account));
 		}
 
 		// 타입
