@@ -44,13 +44,14 @@ public class UserService {
 				.account(account).email(email)
 				.password(password).build();
 		userRepository.save(user);
+		issueCertificateCode(account);
 	}
 
-	public void issueCertificateCode(SignupRequestDto requestDto) {
-		User user = findUser(requestDto.getAccount());
+	public void issueCertificateCode(String account) {
+		User foundUser = findUser(account);
 		Integer code = generateCode();
 		CertificateCode certificateCode = CertificateCode.builder()
-				.Code(code).user(user).build();
+				.Code(code).user(foundUser).build();
 		certificateCodeRepository.save(certificateCode);
 	}
 

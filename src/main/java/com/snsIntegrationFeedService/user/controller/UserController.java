@@ -25,7 +25,6 @@ public class UserController {
 	@PostMapping("/signup")
 	public ResponseEntity<ApiResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto) {
 		userService.signup(requestDto);
-		userService.issueCertificateCode(requestDto);
 		return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.CREATED.value(), "회원 가입 완료"));
 	}
 
