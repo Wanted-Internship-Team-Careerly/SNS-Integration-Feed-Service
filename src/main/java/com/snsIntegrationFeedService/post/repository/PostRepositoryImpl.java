@@ -16,8 +16,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.snsIntegrationFeedService.hashtag.entity.QHashtag;
 import com.snsIntegrationFeedService.post.entity.Post;
 import com.snsIntegrationFeedService.post.entity.PostTypeEnum;
-import com.snsIntegrationFeedService.post.entity.QPost;
-import com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,13 +29,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
 		int pageCount, int page, String account
 	) {
-		QPost qPost = post;
-		QPostHashtag qPostHashtag = postHashtag;
 		QHashtag qHashtag = QHashtag.hashtag;
 
-		JPAQuery<Post> query = queryFactory.selectFrom(qPost)
-			.leftJoin(qPost.postHashtagList, qPostHashtag)
-			.leftJoin(qPostHashtag.hashtag, qHashtag);
+		JPAQuery<Post> query = queryFactory.selectFrom(post)
+			.leftJoin(post.postHashtagList, postHashtag)
+			.leftJoin(postHashtag.hashtag, qHashtag);
 
 		// 해시태그
 		if (hashtag != null) {
@@ -48,14 +44,14 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
 		// 타입
 		if (type != null) {
-			query.where(qPost.type.eq(PostTypeEnum.valueOf(type)));
+			query.where(post.type.eq(PostTypeEnum.valueOf(type)));
 		}
 
 		// 정렬
-		OrderSpecifier<?> orderSpecifier = getOrderSpecifier(qPost, orderBy, sortBy);
+		OrderSpecifier<?> orderSpecifier = getOrderSpecifier(orderBy, sortBy);
 
 		// 검색
-		BooleanExpression searchExpression = getSearchExpression(qPost, searchBy, search);
+		BooleanExpression searchExpression = getSearchExpression(searchBy, search);
 
 		return query.orderBy(orderSpecifier)
 			.where(searchExpression)
@@ -64,7 +60,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 			.fetch();
 	}
 
-	private OrderSpecifier<?> getOrderSpecifier(QPost post, String orderBy, String sortBy) {
+	private OrderSpecifier<?> getOrderSpecifier(String orderBy, String sortBy) {
 		Map<String, OrderSpecifier<?>> orderMap = new HashMap<>();
 		orderMap.put("created_at", sortBy.equals("desc") ? post.createdAt.desc() : post.createdAt.asc());
 		orderMap.put("updated_at", sortBy.equals("desc") ? post.modifiedAt.desc() : post.modifiedAt.asc());
@@ -74,13 +70,13 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 		return orderMap.getOrDefault(orderBy, orderMap.get("created_at"));
 	}
 
-	private BooleanExpression getSearchExpression(QPost qPost, String searchBy, String search) {
+	private BooleanExpression getSearchExpression(String searchBy, String search) {
 		if ("title".equals(searchBy)) {
-			return qPost.title.contains(search);
+			return post.title.contains(search);
 		} else if ("content".equals(searchBy)) {
-			return qPost.content.contains(search);
+			return post.content.contains(search);
 		} else {
-			return qPost.title.contains(search).or(qPost.content.contains(search));
+			return post.title.contains(search).or(post.content.contains(search));
 		}
 	}
 }
