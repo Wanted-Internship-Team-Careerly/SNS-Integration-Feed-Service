@@ -14,7 +14,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.snsIntegrationFeedService.common.error.CustomErrorCode;
 import com.snsIntegrationFeedService.common.exception.CustomException;
+import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
 import com.snsIntegrationFeedService.post.dto.PostDetailResponseDto;
+import com.snsIntegrationFeedService.post.dto.PostsResponseDto;
 import com.snsIntegrationFeedService.post.entity.Post;
 import com.snsIntegrationFeedService.post.repository.PostRepository;
 
@@ -96,4 +98,24 @@ public class PostService {
             throw new CustomException(CustomErrorCode.URL_NOT_FOUND);
         }
     }
+
+	@Transactional(readOnly = true)
+	public PostsResponseDto getPosts(
+		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
+		int pageCount, int page, UserDetailsImpl userDetails) {
+		List<Post> posts = postRepository.findWithFilter(
+			hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page, userDetails.getAccount()
+		);
+
+		List<PostDetailResponseDto> postDetailResponseDtos = posts.stream()
+			.map(post -> {
+				List<String> hashTags = post.getPostHashtagList().stream()
+					.map(postHashtag -> postHashtag.getHashtag().getName())
+					.toList();
+				return PostDetailResponseDto.from(post, hashTags);
+			})
+			.toList();
+
+		return PostsResponseDto.from(postDetailResponseDtos, pageCount, page);
+	}
 }
