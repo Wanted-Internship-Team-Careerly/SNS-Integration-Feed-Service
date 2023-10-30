@@ -64,7 +64,6 @@ public class UserService {
 		int place = 1;
 		while (code / 100000 == 0) {
 			int num = random.nextInt(9) + 1;
-			System.out.println("num = " + num);
 			code += num * place;
 			place *= 10;
 		}
