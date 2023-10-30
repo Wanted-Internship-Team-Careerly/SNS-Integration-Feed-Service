@@ -18,7 +18,6 @@ public class Hashtag {
 	@Column(nullable = false, unique = true)
 	private String name;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "hashtag", orphanRemoval = true)
 	private List<PostHashtag> postHashtagList = new ArrayList<>();
 }

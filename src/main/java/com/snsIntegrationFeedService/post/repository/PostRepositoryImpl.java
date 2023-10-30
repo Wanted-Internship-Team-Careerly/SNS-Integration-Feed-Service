@@ -36,8 +36,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 		QHashtag qHashtag = QHashtag.hashtag;
 
 		JPAQuery<Post> query = queryFactory.selectFrom(qPost)
-			.leftJoin(qPost.postHashtagList, qPostHashtag).fetchJoin()
-			.leftJoin(qPostHashtag.hashtag, qHashtag).fetchJoin();
+			.leftJoin(qPost.postHashtagList, qPostHashtag)
+			.leftJoin(qPostHashtag.hashtag, qHashtag);
 
 		// 해시태그
 		if (hashtag != null) {

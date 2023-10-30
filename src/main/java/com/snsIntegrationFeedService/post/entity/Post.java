@@ -55,7 +55,6 @@ public class Post extends Timestamped {
 	@Column(nullable = false)
 	private Long shareCount;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "post", orphanRemoval = true)
 	private List<PostHashtag> postHashtagList = new ArrayList<>();
 
