@@ -3,7 +3,6 @@ package com.snsIntegrationFeedService.post.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.snsIntegrationFeedService.common.entity.Timestamped;
 import com.snsIntegrationFeedService.postHashtag.entity.PostHashtag;
 import com.snsIntegrationFeedService.user.entity.User;
