@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-  <img src="https://img.shields.io/badge/githubaction-2088FFstyle=for-the-badge&logo=githubaction&logoColor=white">
+  <img src="https://img.shields.io/badge/githubactions-2088FFstyle=for-the-badge&logo=githubactions&logoColor=white">
 
   <br>
 </div>
