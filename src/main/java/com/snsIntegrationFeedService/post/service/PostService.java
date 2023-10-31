@@ -22,6 +22,7 @@ import com.snsIntegrationFeedService.post.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -59,36 +60,52 @@ public class PostService {
         switch (postType) {
             //API 호출 부분
             case TWITTER:
-                statusCode = webClient.get()
-                    .uri("https://www.twitter.com/likes/" + postId)
-                    .retrieve()
-                    .toEntity(String.class)
-                    .block()
-                    .getStatusCode();
+                try {
+                    statusCode = webClient.get()
+                        .uri("https://www.twitter.com/likes/" + postId)
+                        .retrieve()
+                        .toEntity(String.class)
+                        .block()
+                        .getStatusCode();
+                } catch (WebClientResponseException.NotFound e) {
+                    statusCode = HttpStatus.NOT_FOUND;
+                }
                 break;
             case FACEBOOK:
-                statusCode = webClient.get()
-                    .uri("https://www.facebook.com/likes/" + postId)
-                    .retrieve()
-                    .toEntity(String.class)
-                    .block()
-                    .getStatusCode();
+                try {
+                    statusCode = webClient.get()
+                        .uri("https://www.facebook.com/likes/" + postId)
+                        .retrieve()
+                        .toEntity(String.class)
+                        .block()
+                        .getStatusCode();
+                } catch (WebClientResponseException.NotFound e) {
+                    statusCode = HttpStatus.NOT_FOUND;
+                }
                 break;
             case THREADS:
-                statusCode = webClient.get()
-                    .uri("https://www.threads.com/likes/" + postId)
-                    .retrieve()
-                    .toEntity(String.class)
-                    .block()
-                    .getStatusCode();
+                try {
+                    statusCode = webClient.get()
+                        .uri("https://www.threads.com/likes/" + postId)
+                        .retrieve()
+                        .toEntity(String.class)
+                        .block()
+                        .getStatusCode();
+                } catch (WebClientResponseException.NotFound e) {
+                    statusCode = HttpStatus.NOT_FOUND;
+                }
                 break;
             case INSTAGRAM:
-                statusCode = webClient.get()
-                    .uri("https://www.instagram.com/likes/" + postId)
-                    .retrieve()
-                    .toEntity(String.class)
-                    .block()
-                    .getStatusCode();
+                try {
+                    statusCode = webClient.get()
+                        .uri("https://www.instagram.com/likes/" + postId)
+                        .retrieve()
+                        .toEntity(String.class)
+                        .block()
+                        .getStatusCode();
+                } catch (WebClientResponseException.NotFound e) {
+                    statusCode = HttpStatus.NOT_FOUND;
+                }
                 break;
         }
         if (statusCode.value() == HttpStatus.OK.value() || isTest) {
@@ -99,23 +116,24 @@ public class PostService {
         }
     }
 
-	@Transactional(readOnly = true)
-	public PostsResponseDto getPosts(
-		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
-		int pageCount, int page, UserDetailsImpl userDetails) {
-		List<Post> posts = postRepository.findWithFilter(
-			hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page, userDetails.getAccount()
-		);
+    @Transactional(readOnly = true)
+    public PostsResponseDto getPosts(
+        String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
+        int pageCount, int page, UserDetailsImpl userDetails) {
+        List<Post> posts = postRepository.findWithFilter(
+            hashtag, type, orderBy, sortBy, searchBy, search, pageCount, page,
+            userDetails.getAccount()
+        );
 
-		List<PostDetailResponseDto> postDetailResponseDtos = posts.stream()
-			.map(post -> {
-				List<String> hashTags = post.getPostHashtagList().stream()
-					.map(postHashtag -> postHashtag.getHashtag().getName())
-					.toList();
-				return PostDetailResponseDto.from(post, hashTags);
-			})
-			.toList();
+        List<PostDetailResponseDto> postDetailResponseDtos = posts.stream()
+            .map(post -> {
+                List<String> hashTags = post.getPostHashtagList().stream()
+                    .map(postHashtag -> postHashtag.getHashtag().getName())
+                    .toList();
+                return PostDetailResponseDto.from(post, hashTags);
+            })
+            .toList();
 
-		return PostsResponseDto.from(postDetailResponseDtos, pageCount, page);
-	}
+        return PostsResponseDto.from(postDetailResponseDtos, pageCount, page);
+    }
 }
