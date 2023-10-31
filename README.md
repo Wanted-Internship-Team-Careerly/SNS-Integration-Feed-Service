@@ -6,7 +6,10 @@
   어플리케이션 입니다.
 
 ## 💻 기술 스택
-
+<div align=center> 
+  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
+  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+  <br>
 ## 🖼 ERD
 
 ![Wanted-Assignment-1](https://github.com/Wanted-Internship-Team-Careerly/SNS-Integration-Feed-Service/assets/46531692/678f1f27-70e4-4127-8f90-382b94098337)
