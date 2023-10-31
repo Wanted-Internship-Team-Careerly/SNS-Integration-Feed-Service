@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum CustomErrorCode {
+
+	URL_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "잘못된 URL 요청입니다."),
+
 	POST_ID_NOT_FOUND(HttpStatus.BAD_REQUEST.value(),
 			"존재하지 않는 게시글 아이디입니다."),
 	USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST.value(),
@@ -21,6 +24,7 @@ public enum CustomErrorCode {
 			"숫자, 문자, 특수문자 중 2가지 이상을 포함해야 합니다."),
 	NOT_THREE_CONSECUTIVE(HttpStatus.BAD_REQUEST.value(),
 			"3회 이상 연속되는 문자 사용이 불가합니다.");
+
 
 	private final int errorCode;
 	private final String errorMessage;
