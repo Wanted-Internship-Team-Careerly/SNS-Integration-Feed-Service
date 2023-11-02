@@ -7,6 +7,9 @@ import com.snsIntegrationFeedService.post.dto.request.StaticsRequest;
 import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
 import com.snsIntegrationFeedService.post.repository.PostRepository;
 import com.snsIntegrationFeedService.postHashtag.service.PostHashtagService;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,28 +24,31 @@ public class StaticService {
     private final HashtagService hashtagService;
     private final PostHashtagService postHashtagService;
 
-//    public List<StaticsResponse> getListStaticsResponse(StaticsRequest request) {
-//        String value = String.valueOf(request.getValue());
-//        String type = String.valueOf(request.getType());
-//        Date startDate = this.checkStartDate(request.getStart());
-//        Date endDate = this.checkEndDate(request.getEnd());
-//        String hashtag = request.getHashtag();
-//
-//    }
+    // value 가 count, type 이 date인 경우를 가정
+    public List<StaticsResponse> getListStaticsResponse(StaticsRequest request) {
+        List<StaticsResponse> staticsResponses = new ArrayList<>();
+        request.setStart(this.checkStartDate(request.getStart()));
+        request.setEnd(this.checkEndDate(request.getEnd()));
 
-    public StaticsResponse getDateStaticsResponse(String value, Date date, String hashtag) {
-        List<Long> postIds = postHashtagService.getPostIdsByHashtag(hashtag);
-        long count = postRepository.findCountByValueAndDate(value, date);
+        // Calendar 객체를 사용하여 startDate를 설정합니다.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(request.getStart());
 
-        return StaticsResponse.builder()
-                .date(date)
-                .num(count)
-                .build();
+        while (!calendar.getTime().after(request.getEnd())) {
+
+            // 현재 날짜를 가져옵니다.
+            Date currentDate = calendar.getTime();
+            int count = postRepository.findByStaticsRequest(request, currentDate);
+
+            StaticsResponse staticsResponse = StaticsResponse.builder().date(currentDate).num(count).build();
+            staticsResponses.add(staticsResponse);
+
+            // 다음 날짜로 이동
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return staticsResponses;
     }
-
-//    public StaticsResponse getHourStaticsResponse() {
-//
-//    }
 
     private Date checkStartDate(Date startDate) {
 
