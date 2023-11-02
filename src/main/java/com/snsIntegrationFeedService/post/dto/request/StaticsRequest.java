@@ -6,13 +6,16 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class StaticsRequest {
     private CountType value;
     private DateType type;
     private String hashtag;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date start;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date end;
 
     public StaticsRequest(CountType value, DateType type, String hashtag, Date start, Date end) {
