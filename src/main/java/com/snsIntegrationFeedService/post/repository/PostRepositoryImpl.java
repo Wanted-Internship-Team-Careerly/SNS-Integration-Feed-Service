@@ -1,10 +1,10 @@
 package com.snsIntegrationFeedService.post.repository;
 
+import static com.snsIntegrationFeedService.hashtag.entity.QHashtag.hashtag;
 import static com.snsIntegrationFeedService.post.entity.QPost.*;
 import static com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag.*;
 
-import com.snsIntegrationFeedService.post.DateType;
-import com.snsIntegrationFeedService.post.dto.request.StaticsRequest;
+import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
 import com.snsIntegrationFeedService.post.entity.QPost;
 import com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag;
 import java.time.LocalDateTime;
@@ -72,10 +72,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 	// 2. post_hashtag 테이블에서 해당 hashtag_id를 가진 post를 가져온다
 	// 3. 해당 post들중 기간에 맞는 post의 개수를 출력한다
 	@Override
-	public int findByStaticsRequest(StaticsRequest request, Date date) {
-		QPost post = QPost.post;
-		QPostHashtag postHashtag = QPostHashtag.postHashtag;
-		QHashtag hashtag = QHashtag.hashtag;
+	public int findByStaticsRequest(StaticsRequestDto request, Date date) {
 
 		String hashtagName = request.getHashtag(); // request에서 hashtag 이름을 가져옵니다.
 		// 기간의 시작 시간을 설정합니다.
@@ -118,20 +115,4 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 			return post.title.contains(search).or(post.content.contains(search));
 		}
 	}
-
-
-
-//	private LocalDateTime getDayFromDate() {
-//		// date, hour타입
-//		if (request.getType() == DateType.date) {
-//			query.where(post.createdAt.eq(currentDate));
-//		} else if (request.getType() == DateType.hour) {
-//			// 시간까지 비교하는 경우 해당 시간의 범위를 정의하여 비교한다.
-//			LocalDateTime startHour = currentDate.withHour(hour).withMinute(0).withSecond(0).withNano(0);
-//			LocalDateTime endHour = startHour.plusHours(1);
-//			query.where(post.createdAt.between(startHour, endHour));
-//		}
-//	}
-
-
 }
