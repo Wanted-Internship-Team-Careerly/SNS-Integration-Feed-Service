@@ -1,5 +1,7 @@
 package com.snsIntegrationFeedService.post.service;
 
+import com.snsIntegrationFeedService.common.error.CustomErrorCode;
+import com.snsIntegrationFeedService.common.exception.CustomException;
 import com.snsIntegrationFeedService.hashtag.service.HashtagService;
 import com.snsIntegrationFeedService.post.CountType;
 import com.snsIntegrationFeedService.post.DateType;
@@ -15,8 +17,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StaticService {
@@ -29,9 +33,7 @@ public class StaticService {
 
         // todo
         // start가 end보다 더 뒤일 경우 예외처리
-
-        request.setStart(this.checkStartDate(request.getStart()));
-        request.setEnd(this.checkEndDate(request.getEnd()));
+        checkStartAndEndDate(request);
 
         // hashtag 값 검증
         if (request.getHashtag() == null) {
@@ -53,7 +55,8 @@ public class StaticService {
             Date currentDate = calendar.getTime();
             int count = postRepository.findByStaticsRequest(request, currentDate);
 
-            StaticsResponse staticsResponse = StaticsResponse.builder().date(currentDate).num(count).build();
+            StaticsResponse staticsResponse = StaticsResponse.builder().date(currentDate).num(count)
+                    .build();
             staticsResponses.add(staticsResponse);
 
             // 다음 날짜로 이동
@@ -89,5 +92,24 @@ public class StaticService {
         } else {
             return endDate;
         }
+    }
+
+    private void checkStartAndEndDate(StaticsRequest request) {
+        // todo
+        // start가 end보다 더 뒤일 경우 예외처리
+        Date startDate = new Date();
+        Date endDate = new Date();
+        try {
+            startDate = this.checkStartDate(request.getStart());
+            endDate = this.checkEndDate(request.getEnd());
+            if (startDate.after(endDate)) {
+                throw new CustomException(CustomErrorCode.NOT_AVAIABLE_DATE);
+            }
+        } catch (Exception e) {
+            log.error(">> startDate와 endDate가 유요하지 않습니다. {}", e.getMessage());
+        }
+
+        request.setStart(startDate);
+        request.setEnd(endDate);
     }
 }
