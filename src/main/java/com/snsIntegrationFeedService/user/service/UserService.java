@@ -40,7 +40,7 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	public User findUser(String account) {
+	private User findUser(String account) {
 		return userRepository.findByAccount(account).orElse(null);
 	}
 
