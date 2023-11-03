@@ -18,6 +18,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.UUID;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -59,5 +61,21 @@ public class Post extends Timestamped {
 
 	public void view() {
 		this.viewCount++;
+	}
+
+	@Builder
+	public Post(User user, PostTypeEnum type, String title, String content) {
+		this.user = user;
+		this.postId = UUID.randomUUID().toString();
+		this.type = type;
+		this.title = title;
+		this.content = content;
+		this.viewCount = 0L;
+		this.likeCount = 0L;
+		this.shareCount = 0L;
+	}
+
+	public Post() {
+
 	}
 }
