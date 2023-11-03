@@ -2,16 +2,11 @@ package com.snsIntegrationFeedService.post.service;
 
 import com.snsIntegrationFeedService.common.error.CustomErrorCode;
 import com.snsIntegrationFeedService.common.exception.CustomException;
-import com.snsIntegrationFeedService.hashtag.service.HashtagService;
 import com.snsIntegrationFeedService.post.CountType;
-import com.snsIntegrationFeedService.post.DateType;
-import com.snsIntegrationFeedService.post.dto.request.StaticsRequest;
+import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
 import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
 import com.snsIntegrationFeedService.post.repository.PostRepository;
-import com.snsIntegrationFeedService.postHashtag.service.PostHashtagService;
 import com.snsIntegrationFeedService.user.entity.User;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,16 +14,18 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StaticService {
 
     private final PostRepository postRepository;
 
     // value 가 count, type 이 date인 경우를 가정
-    public List<StaticsResponse> getListStaticsResponse(StaticsRequest request, User user) {
+    public List<StaticsResponse> getListStaticsResponse(StaticsRequestDto request, User user) {
         List<StaticsResponse> staticsResponses = new ArrayList<>();
 
         // todo
@@ -94,7 +91,7 @@ public class StaticService {
         }
     }
 
-    private void checkStartAndEndDate(StaticsRequest request) {
+    private void checkStartAndEndDate(StaticsRequestDto request) {
         // todo
         // start가 end보다 더 뒤일 경우 예외처리
         Date startDate = new Date();
