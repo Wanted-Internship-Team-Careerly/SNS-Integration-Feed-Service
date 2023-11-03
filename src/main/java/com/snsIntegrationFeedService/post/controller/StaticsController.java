@@ -2,7 +2,7 @@ package com.snsIntegrationFeedService.post.controller;
 
 import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
 import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
-import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
+import com.snsIntegrationFeedService.post.dto.response.StaticsResponseDto;
 
 import com.snsIntegrationFeedService.post.service.StaticService;
 
@@ -23,7 +23,7 @@ public class StaticsController {
     private final UserService userService;
 
     @GetMapping(value = "/api/posts/statics")
-    public ResponseEntity<List<StaticsResponse>> getResponse(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute StaticsRequestDto request) {
+    public ResponseEntity<List<StaticsResponseDto>> getResponse(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute StaticsRequestDto request) {
 
         return ResponseEntity.ok()
                 .body(staticService.getListStaticsResponse(request, userDetails.getUser()));

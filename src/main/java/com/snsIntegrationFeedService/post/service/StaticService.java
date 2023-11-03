@@ -4,7 +4,7 @@ import com.snsIntegrationFeedService.common.error.CustomErrorCode;
 import com.snsIntegrationFeedService.common.exception.CustomException;
 import com.snsIntegrationFeedService.post.CountType;
 import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
-import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
+import com.snsIntegrationFeedService.post.dto.response.StaticsResponseDto;
 import com.snsIntegrationFeedService.post.repository.PostRepository;
 import com.snsIntegrationFeedService.user.entity.User;
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class StaticService {
     private final PostRepository postRepository;
 
     // value 가 count, type 이 date인 경우를 가정
-    public List<StaticsResponse> getListStaticsResponse(StaticsRequestDto request, User user) {
-        List<StaticsResponse> staticsResponses = new ArrayList<>();
+    public List<StaticsResponseDto> getListStaticsResponse(StaticsRequestDto request, User user) {
+        List<StaticsResponseDto> staticsResponses = new ArrayList<>();
 
         // todo
         // start가 end보다 더 뒤일 경우 예외처리
@@ -52,7 +52,7 @@ public class StaticService {
             Date currentDate = calendar.getTime();
             int count = postRepository.findByStaticsRequest(request, currentDate);
 
-            StaticsResponse staticsResponse = StaticsResponse.builder().date(currentDate).num(count)
+            StaticsResponseDto staticsResponse = StaticsResponseDto.builder().date(currentDate).num(count)
                     .build();
             staticsResponses.add(staticsResponse);
 

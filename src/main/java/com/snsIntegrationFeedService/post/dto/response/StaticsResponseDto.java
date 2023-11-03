@@ -1,24 +1,22 @@
 package com.snsIntegrationFeedService.post.dto.response;
 
-import com.snsIntegrationFeedService.post.entity.Post;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 //@NoArgsConstructor
 @Getter
 @Builder
-public class StaticsResponse {
+public class StaticsResponseDto {
 
     private Date date;
 
     private long num;
 
-    public static StaticsResponse from(Date date, int num) {
-        return StaticsResponse.builder()
+    public static StaticsResponseDto from(Date date, int num) {
+        return StaticsResponseDto.builder()
                 .date(date)
                 .num(num)
                 .build();

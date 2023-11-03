@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class CreatePostRequest {
+public class CreatePostRequestDto {
 
     private PostTypeEnum type;
 
@@ -19,7 +19,7 @@ public class CreatePostRequest {
     private String hashtag;
 
 
-    public Post toEntity(User user, CreatePostRequest request) {
+    public Post toEntity(User user, CreatePostRequestDto request) {
         return Post.builder()
                 .user(user)
                 .type(request.type)

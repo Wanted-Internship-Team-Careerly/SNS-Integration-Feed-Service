@@ -2,7 +2,7 @@ package com.snsIntegrationFeedService.post.service;
 
 import com.snsIntegrationFeedService.hashtag.entity.Hashtag;
 import com.snsIntegrationFeedService.hashtag.service.HashtagService;
-import com.snsIntegrationFeedService.post.dto.request.CreatePostRequest;
+import com.snsIntegrationFeedService.post.dto.request.CreatePostRequestDto;
 import com.snsIntegrationFeedService.postHashtag.service.PostHashtagService;
 import com.snsIntegrationFeedService.user.entity.User;
 import java.util.List;
@@ -48,7 +48,7 @@ public class PostService {
 		return PostDetailResponseDto.from(post, hashTags);
 	}
 
-	public Post createPost(User user, CreatePostRequest request) {
+	public Post createPost(User user, CreatePostRequestDto request) {
 		// post 생성
 		Post savedPost = postRepository.save(request.toEntity(user, request));
 
