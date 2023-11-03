@@ -1,6 +1,7 @@
 package com.snsIntegrationFeedService.post.controller;
 
-import com.snsIntegrationFeedService.post.dto.request.StaticsRequest;
+import com.snsIntegrationFeedService.common.security.UserDetailsImpl;
+import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
 import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
 
 import com.snsIntegrationFeedService.post.service.StaticService;
@@ -9,6 +10,7 @@ import com.snsIntegrationFeedService.user.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +23,10 @@ public class StaticsController {
     private final UserService userService;
 
     @GetMapping(value = "/api/posts/statics")
-    public ResponseEntity<List<StaticsResponse>> getResponse(@ModelAttribute StaticsRequest request) {
+    public ResponseEntity<List<StaticsResponse>> getResponse(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute StaticsRequestDto request) {
 
         return ResponseEntity.ok()
-                .body(staticService.getListStaticsResponse(request, userService.findUser(
-                        request.getUserAccount())));
+                .body(staticService.getListStaticsResponse(request, userDetails.getUser()));
     }
 
 }
