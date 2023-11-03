@@ -1,6 +1,6 @@
 package com.snsIntegrationFeedService.post.repository;
 
-import com.snsIntegrationFeedService.post.dto.request.StaticsRequest;
+import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
 import java.util.Date;
 import java.util.List;
 
@@ -12,5 +12,5 @@ public interface PostRepositoryCustom {
 		String hashtag, String type, String orderBy, String sortBy, String searchBy, String search,
 		int pageCount, int page, String account);
 
-	int findByStaticsRequest(StaticsRequest request, Date date);
+	int findByStaticsRequest(StaticsRequestDto request, Date date);
 }
