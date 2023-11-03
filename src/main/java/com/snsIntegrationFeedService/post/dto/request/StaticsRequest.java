@@ -13,6 +13,8 @@ public class StaticsRequest {
     private CountType value;
     private DateType type;
     private String hashtag;
+
+    private String userAccount;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date start;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -21,7 +23,7 @@ public class StaticsRequest {
     public StaticsRequest(CountType value, DateType type, String hashtag, Date start, Date end) {
         this.value = (value != null) ? value : CountType.count;
         this.type = type;
-        this.hashtag = (hashtag != null) ? hashtag : "본인계정";
+        this.hashtag = hashtag;
         this.start = start;
         this.end = end;
     }

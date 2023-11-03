@@ -5,6 +5,7 @@ import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
 
 import com.snsIntegrationFeedService.post.service.StaticService;
 
+import com.snsIntegrationFeedService.user.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class StaticsController {
 
     private final StaticService staticService;
+    private final UserService userService;
 
     @GetMapping(value = "/api/posts/statics")
     public ResponseEntity<List<StaticsResponse>> getResponse(@ModelAttribute StaticsRequest request) {
 
         return ResponseEntity.ok()
-                .body(staticService.getListStaticsResponse(request));
+                .body(staticService.getListStaticsResponse(request, userService.findUser(
+                        request.getUserAccount())));
     }
 
 }

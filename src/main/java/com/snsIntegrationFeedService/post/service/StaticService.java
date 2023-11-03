@@ -7,6 +7,7 @@ import com.snsIntegrationFeedService.post.dto.request.StaticsRequest;
 import com.snsIntegrationFeedService.post.dto.response.StaticsResponse;
 import com.snsIntegrationFeedService.post.repository.PostRepository;
 import com.snsIntegrationFeedService.postHashtag.service.PostHashtagService;
+import com.snsIntegrationFeedService.user.entity.User;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -21,14 +22,26 @@ import org.springframework.stereotype.Service;
 public class StaticService {
 
     private final PostRepository postRepository;
-    private final HashtagService hashtagService;
-    private final PostHashtagService postHashtagService;
 
     // value 가 count, type 이 date인 경우를 가정
-    public List<StaticsResponse> getListStaticsResponse(StaticsRequest request) {
+    public List<StaticsResponse> getListStaticsResponse(StaticsRequest request, User user) {
         List<StaticsResponse> staticsResponses = new ArrayList<>();
+
+        // todo
+        // start가 end보다 더 뒤일 경우 예외처리
+
         request.setStart(this.checkStartDate(request.getStart()));
         request.setEnd(this.checkEndDate(request.getEnd()));
+
+        // hashtag 값 검증
+        if (request.getHashtag() == null) {
+            request.setHashtag(user.getAccount());
+        }
+
+        // value 값 검증
+        if (request.getValue() == null) {
+            request.setValue(CountType.count);
+        }
 
         // Calendar 객체를 사용하여 startDate를 설정합니다.
         Calendar calendar = Calendar.getInstance();
