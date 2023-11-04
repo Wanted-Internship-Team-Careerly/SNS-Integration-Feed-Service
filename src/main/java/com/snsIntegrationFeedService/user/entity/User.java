@@ -39,6 +39,10 @@ public class User {
 	@OneToOne(mappedBy = "user")
 	private CertificateCode certificateCode;
 
+	public void approveUser() {
+		this.isAccessed = true;
+	}
+
 	@Builder
 	public User(String account, String password, String email) {
 		this.account = account;

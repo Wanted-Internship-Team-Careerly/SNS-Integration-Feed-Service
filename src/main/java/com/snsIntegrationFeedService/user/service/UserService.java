@@ -1,5 +1,8 @@
 package com.snsIntegrationFeedService.user.service;
 
+import com.snsIntegrationFeedService.certificateCode.entity.CertificateCode;
+import com.snsIntegrationFeedService.certificateCode.repository.CertificateCodeRepository;
+import com.snsIntegrationFeedService.certificateCode.service.CertificateCodeService;
 import com.snsIntegrationFeedService.common.error.CustomErrorCode;
 import com.snsIntegrationFeedService.common.exception.CustomException;
 import com.snsIntegrationFeedService.user.dto.SignupRequestDto;
@@ -10,12 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final CertificateCodeRepository certificateCodeRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final PasswordValidation passwordValidation;
 
@@ -38,10 +44,30 @@ public class UserService {
 				.account(account).email(email)
 				.password(password).build();
 		userRepository.save(user);
+		issueCertificateCode(account);
 	}
 
-	private User findUser(String account) {
+	public void issueCertificateCode(String account) {
+		User foundUser = findUser(account);
+		Integer code = generateCode();
+		CertificateCode certificateCode = CertificateCode.builder()
+				.Code(code).user(foundUser).build();
+		certificateCodeRepository.save(certificateCode);
+	}
+
+	public User findUser(String account) {
 		return userRepository.findByAccount(account).orElse(null);
 	}
 
+	private Integer generateCode() {
+		Random random = new Random();
+		int code = 0;
+		int place = 1;
+		while (code / 100000 == 0) {
+			int num = random.nextInt(9) + 1;
+			code += num * place;
+			place *= 10;
+		}
+		return code;
+	}
 }
