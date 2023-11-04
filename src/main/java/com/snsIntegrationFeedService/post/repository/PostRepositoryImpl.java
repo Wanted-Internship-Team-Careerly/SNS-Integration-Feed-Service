@@ -1,8 +1,15 @@
 package com.snsIntegrationFeedService.post.repository;
 
+import static com.snsIntegrationFeedService.hashtag.entity.QHashtag.hashtag;
 import static com.snsIntegrationFeedService.post.entity.QPost.*;
 import static com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag.*;
 
+import com.snsIntegrationFeedService.post.dto.request.StaticsRequestDto;
+import com.snsIntegrationFeedService.post.entity.QPost;
+import com.snsIntegrationFeedService.postHashtag.entity.QPostHashtag;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +65,35 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 			.offset((long)page * pageCount)
 			.limit(pageCount)
 			.fetch();
+	}
+
+	// todo
+	// 1. hashtag의 id를 name=request.getHashtag() 를 통해 가져온다
+	// 2. post_hashtag 테이블에서 해당 hashtag_id를 가진 post를 가져온다
+	// 3. 해당 post들중 기간에 맞는 post의 개수를 출력한다
+	@Override
+	public int findByStaticsRequest(StaticsRequestDto request, Date date) {
+
+		String hashtagName = request.getHashtag(); // request에서 hashtag 이름을 가져옵니다.
+		// 기간의 시작 시간을 설정합니다.
+		LocalDateTime startOfDay = date.toInstant().atZone(ZoneId.systemDefault())
+				.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime();
+		// 기간의 종료 시간을 설정합니다.
+		LocalDateTime endOfDay = date.toInstant().atZone(ZoneId.systemDefault())
+				.toLocalDate().atTime(23, 59, 59);
+
+		Long hashtagId = queryFactory.select(hashtag.id)
+				.from(hashtag)
+				.where(hashtag.name.eq(hashtagName))
+				.fetchOne();
+
+		return queryFactory.selectFrom(post)
+				.innerJoin(postHashtag)
+				.on(post.id.eq(postHashtag.post.id))
+				.where(postHashtag.hashtag.id.eq(hashtagId)
+						.and(post.createdAt.between(startOfDay, endOfDay)))
+				.fetch().size();
+
 	}
 
 	private OrderSpecifier<?> getOrderSpecifier(String orderBy, String sortBy) {

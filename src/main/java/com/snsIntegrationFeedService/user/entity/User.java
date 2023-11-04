@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class User {
 	@Id
@@ -42,5 +41,16 @@ public class User {
 
 	public void approveUser() {
 		this.isAccessed = true;
+	}
+
+	@Builder
+	public User(String account, String password, String email) {
+		this.account = account;
+		this.password = password;
+		this.email = email;
+	}
+
+	public User() {
+
 	}
 }

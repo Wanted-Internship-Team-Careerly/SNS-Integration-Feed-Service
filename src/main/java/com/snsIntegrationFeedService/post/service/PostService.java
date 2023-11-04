@@ -1,5 +1,10 @@
 package com.snsIntegrationFeedService.post.service;
 
+import com.snsIntegrationFeedService.hashtag.entity.Hashtag;
+import com.snsIntegrationFeedService.hashtag.service.HashtagService;
+import com.snsIntegrationFeedService.post.dto.request.CreatePostRequestDto;
+import com.snsIntegrationFeedService.postHashtag.service.PostHashtagService;
+import com.snsIntegrationFeedService.user.entity.User;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +28,9 @@ public class PostService {
 
 	private final PostRepository postRepository;
 
+	private final HashtagService hashtagService;
+	private final PostHashtagService postHashtagService;
+
 	@Transactional
 	public PostDetailResponseDto getPostDetail(String postId) {
 		// 예외 처리
@@ -38,6 +46,19 @@ public class PostService {
 		// 조회수 증가
 		post.view();
 		return PostDetailResponseDto.from(post, hashTags);
+	}
+
+	public Post createPost(User user, CreatePostRequestDto request) {
+		// post 생성
+		Post savedPost = postRepository.save(request.toEntity(user, request));
+
+		// hashtag 생성
+		Hashtag hashtag = hashtagService.createHashtag(request.getHashtag());
+
+		// postHashtag 생성
+		postHashtagService.createPostHashtag(savedPost, hashtag);
+
+		return savedPost;
 	}
 
 	@Transactional(readOnly = true)
