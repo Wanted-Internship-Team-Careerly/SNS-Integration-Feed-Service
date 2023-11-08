@@ -81,3 +81,4 @@ public class PostService {
 		return PostsResponseDto.from(postDetailResponseDtos, pageCount, page);
 	}
 }
+

@@ -77,22 +77,22 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 		String hashtagName = request.getHashtag(); // request에서 hashtag 이름을 가져옵니다.
 		// 기간의 시작 시간을 설정합니다.
 		LocalDateTime startOfDay = date.toInstant().atZone(ZoneId.systemDefault())
-			.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime();
+				.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime();
 		// 기간의 종료 시간을 설정합니다.
 		LocalDateTime endOfDay = date.toInstant().atZone(ZoneId.systemDefault())
-			.toLocalDate().atTime(23, 59, 59);
+				.toLocalDate().atTime(23, 59, 59);
 
 		Long hashtagId = queryFactory.select(hashtag.id)
-			.from(hashtag)
-			.where(hashtag.name.eq(hashtagName))
-			.fetchOne();
+				.from(hashtag)
+				.where(hashtag.name.eq(hashtagName))
+				.fetchOne();
 
 		return queryFactory.selectFrom(post)
-			.innerJoin(postHashtag)
-			.on(post.id.eq(postHashtag.post.id))
-			.where(postHashtag.hashtag.id.eq(hashtagId)
-				.and(post.createdAt.between(startOfDay, endOfDay)))
-			.fetch().size();
+				.innerJoin(postHashtag)
+				.on(post.id.eq(postHashtag.post.id))
+				.where(postHashtag.hashtag.id.eq(hashtagId)
+						.and(post.createdAt.between(startOfDay, endOfDay)))
+				.fetch().size();
 
 	}
 

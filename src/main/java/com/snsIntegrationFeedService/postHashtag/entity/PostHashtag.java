@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.snsIntegrationFeedService.hashtag.entity.Hashtag;
 import com.snsIntegrationFeedService.post.entity.Post;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -22,4 +23,14 @@ public class PostHashtag {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "hashtag_id")
 	private Hashtag hashtag;
+
+	@Builder
+	public PostHashtag(Post post, Hashtag hashtag) {
+		this.post = post;
+		this.hashtag = hashtag;
+	}
+
+	public PostHashtag() {
+
+	}
 }
