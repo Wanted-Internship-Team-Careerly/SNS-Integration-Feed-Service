@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -24,5 +25,14 @@ public class Hashtag {
 	private String name;
 
 	@OneToMany(mappedBy = "hashtag", orphanRemoval = true)
-	private List<PostHashtag> postHashtagList = new ArrayList<>();
+	private final List<PostHashtag> postHashtagList = new ArrayList<>();
+
+	@Builder
+	public Hashtag(String name) {
+		this.name = name;
+	}
+
+	public Hashtag() {
+
+	}
 }
